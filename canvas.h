@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QTimer>
+#include <QtMath>
 
 #include "shape.h"
 
@@ -34,17 +36,28 @@ private slots:
 
     void on_clearButton_clicked();
 
+    void on_startButton_clicked();
+
+    void updateAnimation();
+
+    void on_startButton_2_clicked();
+
 private:
     Ui::Canvas *ui;
     QPainter *paint;
     void paintEvent(QPaintEvent *);
     QPoint mousePoint;
+    QTimer *animationTimer;
     Shape begin_shape;
     Shape end_shape;
+    Shape inter_shape;
     int editMethod;
     int interMethod;
     int timeMethod;
     int time;
+    int total_time;
+    int num_time;
+    bool animationStart;
     void editPoint();
     void paintBeginShape();
     void paintEndShape();
