@@ -7,6 +7,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <QtMath>
+#include <QVector2D>
 
 #include "shape.h"
 

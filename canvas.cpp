@@ -69,21 +69,43 @@ void Canvas::paintEvent(QPaintEvent *)
 
 void Canvas::updateAnimation()
 {
-    if(this->interMethod == 0){
+    if(this->interMethod == 0) {
         this->inter_shape.clear();
         float val = (float)this->time / this->num_time;
         if(this->timeMethod == 1) val = 1 - qCos(3.14 * val / 2);
         if(this->timeMethod == 2) val = qSin(3.14 * val / 2);
-        qDebug()<<val;
         for(int i = 0; i < this->begin_shape.point.size(); i ++)
             this->inter_shape.add_point((1-val) * this->begin_shape.point[i] + val * this->end_shape.point[i]);
     }
+
+    if(this->interMethod == 1) {
+        this->inter_shape.clear();
+        float val = (float)this->time / this->num_time;
+        if(this->timeMethod == 1) val = 1 - qCos(3.14 * val / 2);
+        if(this->timeMethod == 2) val = qSin(3.14 * val / 2);
+        this->inter_shape.add_point((1-val)*this->begin_shape.point[0] + val * this->end_shape.point[0]);
+        for(int i = 1; i < this->begin_shape.point.size(); i ++) {
+            QVector2D dis0 = QVector2D(this->begin_shape.point[i] - this->begin_shape.point[i - 1]);
+            float r0 = dis0.length();
+            float t0 = qAtan(dis0.y()/dis0.x());
+            QVector2D dis1 = QVector2D(this->end_shape.point[i] - this->end_shape.point[i - 1]);
+            float r1 = dis1.length();
+            float t1 = qAtan(dis1.y()/dis1.x());
+            float ri = (1-val)*r0 + val * r1;
+            float ti = (1-val)*t0 + val * t1;
+            QVector2D disi = QVector2D(ri * qCos(ti), ri * qSin(ti));
+            qDebug()<<i;
+            qDebug()<<t0<<ti;
+            qDebug()<<dis0.x()<<disi.x()<<dis0.y()<<disi.y();
+            this->inter_shape.add_point(this->inter_shape.point[i-1]+disi.toPoint());
+        }
+
+    }
+
     this->time++;
     if(this->time > this->num_time) {
         this->time = 0;
     }
-
-    qDebug("haha");
 
     repaint();
 }
