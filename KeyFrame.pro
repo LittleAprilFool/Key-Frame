@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        canvas.cpp
+        canvas.cpp \
+    shape.cpp
 
-HEADERS  += canvas.h
+HEADERS  += canvas.h \
+    shape.h
 
 FORMS    += canvas.ui
