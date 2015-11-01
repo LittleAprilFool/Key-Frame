@@ -227,7 +227,7 @@
     <string>1</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="saveButton">
    <property name="geometry">
     <rect>
      <x>540</x>
@@ -240,7 +240,7 @@
     <string>Save</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="undoButton">
    <property name="geometry">
     <rect>
      <x>460</x>
@@ -253,7 +253,7 @@
     <string>Undo</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="clearButton">
    <property name="geometry">
     <rect>
      <x>620</x>
