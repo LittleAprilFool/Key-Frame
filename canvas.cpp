@@ -85,19 +85,25 @@ void Canvas::updateAnimation()
         if(this->timeMethod == 2) val = qSin(3.14 * val / 2);
         this->inter_shape.add_point((1-val)*this->begin_shape.point[0] + val * this->end_shape.point[0]);
         for(int i = 1; i < this->begin_shape.point.size(); i ++) {
+            float pi = 3.14;
             QVector2D dis0 = QVector2D(this->begin_shape.point[i] - this->begin_shape.point[i - 1]);
             float r0 = dis0.length();
-            float t0 = qAtan(dis0.y()/dis0.x());
+            float t0 = qAtan(- dis0.y()/dis0.x());
+            if(dis0.x() < 0) t0 = t0 + pi;
             QVector2D dis1 = QVector2D(this->end_shape.point[i] - this->end_shape.point[i - 1]);
             float r1 = dis1.length();
-            float t1 = qAtan(dis1.y()/dis1.x());
+            float t1 = qAtan(- dis1.y()/dis1.x());
+            if(dis1.x() < 0) t1 = t1 + pi;
             float ri = (1-val)*r0 + val * r1;
             float ti = (1-val)*t0 + val * t1;
+            if((t0 <= 0) && (t1 >= t0 + pi)) ti = ((1-val) * (t0 + pi) + val * (t1 - pi)) - pi;
+            if((0 <= t0) && (t0 <= pi/2)  && (t0 + pi <= t1 )) {qDebug("hehe");ti =(1-val) * (t0 + pi) + val * (t1 - pi) - pi;}
+            if((pi/2 <= t0) && (t0 <= pi) && (t1 <= t0 - pi)) ti = pi + (1-val) * (t0 - pi) + val * (t1 + pi);
+            if((pi <= t0) && (t0 <= 3*pi/2) && (t1 <= t0 - pi)) ti = pi + ((1-val) * (t0 - pi) + val * (t1 + pi));
             QVector2D disi = QVector2D(ri * qCos(ti), ri * qSin(ti));
-            qDebug()<<i;
-            qDebug()<<t0<<ti;
-            qDebug()<<dis0.x()<<disi.x()<<dis0.y()<<disi.y();
-            this->inter_shape.add_point(this->inter_shape.point[i-1]+disi.toPoint());
+            QPoint tmp = disi.toPoint();
+            tmp.setY(-tmp.y());
+            this->inter_shape.add_point(this->inter_shape.point[i-1]+tmp);
         }
 
     }
@@ -105,6 +111,7 @@ void Canvas::updateAnimation()
     this->time++;
     if(this->time > this->num_time) {
         this->time = 0;
+        animationTimer->stop();
     }
 
     repaint();
